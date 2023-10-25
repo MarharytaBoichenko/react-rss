@@ -8,6 +8,7 @@ import api from './components/api';
 type AppProps = {
   message: string;
 };
+
 type AppState = {
   query: string;
   gallery: [];
@@ -69,9 +70,6 @@ class App extends React.Component<AppProps, AppState> {
         item: data.results[0],
       });
     });
-    // api.fetchListData().then((data) => {
-    //   console.log(data);
-    // });
   };
 
   render() {

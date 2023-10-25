@@ -13,7 +13,7 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.{ts,tsx}": "eslint --cache --fix"
+    "*.{ts,tsx}": "eslint --fix"
   },
   "dependencies": {
     "eslint-import-resolver-typescript": "^3.6.1",

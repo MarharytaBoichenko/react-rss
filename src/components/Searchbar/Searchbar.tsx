@@ -2,7 +2,7 @@ import React, { ChangeEvent, FormEvent } from 'react';
 import s from './Searchbar.module.css';
 
 type SearchbarProps = {
-  onSubmit: (data: string) => void;
+  onSubmit: (data: { query: string }) => void;
 };
 type SearchbarState = {
   query: string;
@@ -41,15 +41,10 @@ class Searchbar extends React.Component<SearchbarProps, SearchbarState> {
   };
 
   render() {
-    // const { children } = this.props;
-
     return (
       <header className={s.searchbar}>
         <form className={s.searchForm} onSubmit={this.formSubmitHandler}>
-          <button type="submit" className={s.searchForm__button}>
-            <span className={s.searchForm__buttonLabel}>Search</span>
-          </button>
-
+          <button type="submit" className={s.searchForm__button}></button>
           <input
             className={s.searchForm__input}
             type="text"
