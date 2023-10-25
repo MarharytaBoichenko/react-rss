@@ -1,4 +1,4 @@
-import { Component, ChangeEvent, FormEvent } from 'react';
+import React, { ChangeEvent, FormEvent } from 'react';
 import s from './Searchbar.module.css';
 
 type SearchbarProps = {
@@ -8,10 +8,23 @@ type SearchbarState = {
   query: string;
 };
 
-class Searchbar extends Component {
+class Searchbar extends React.Component<SearchbarProps, SearchbarState> {
   state = {
     query: '',
   };
+
+  componentDidMount(): void {
+    const queryFromLS = localStorage.getItem('search');
+    if (queryFromLS) {
+      this.setState({
+        query: queryFromLS,
+      });
+    } else {
+      this.setState({
+        query: '',
+      });
+    }
+  }
   onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     this.setState({
       query: e.target.value,
@@ -21,6 +34,7 @@ class Searchbar extends Component {
   formSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
     this.props.onSubmit(this.state);
+    localStorage.setItem('search', this.state.query);
     this.setState({
       query: '',
     });
