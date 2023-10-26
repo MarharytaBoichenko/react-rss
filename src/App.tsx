@@ -3,10 +3,11 @@ import './App.css';
 import Searchbar from './components/Searchbar/Searchbar';
 import Gallery from './components/Gallery/Gallery';
 import GalleryItem from './components/GalleryItem/GalleryItem';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import api from './components/api';
 
 type AppProps = {
-  message: string;
+  message?: string;
 };
 
 type AppState = {
@@ -40,17 +41,19 @@ class App extends React.Component<AppProps, AppState> {
     } else {
       this.setState({ query: firstPageQuery });
       console.log('in else');
-      this.getData();
+      this.getData(firstPageQuery);
     }
   }
 
   componentDidUpdate(prevProps: Readonly<AppProps>, prevState: Readonly<AppState>): void {
     const prevQuery = prevState.query;
     const newQuery = this.state.query;
+    console.log(prevQuery);
+    console.log(newQuery);
 
     if (prevQuery !== newQuery) {
       console.log('we need  new search');
-      this.getData();
+      this.getData(newQuery);
     }
   }
 
@@ -62,31 +65,41 @@ class App extends React.Component<AppProps, AppState> {
     });
   };
 
-  getData = () => {
-    console.log(this.state.query);
-    api.fetchDataBySearch(this.state.query).then((data) => {
+  getData = (dataForSearch: string) => {
+    console.log('dataForSearch', dataForSearch);
+    console.log('this.state.query', this.state.query);
+    api.fetchDataBySearch(dataForSearch).then((data) => {
       console.log('etchDataBySearch', data);
+      // this.setState({
+      //   item: data.results[0],
+      // });
       this.setState({
-        item: data.results[0],
+        gallery: data.results,
       });
     });
   };
 
+  setError = () => {
+    throw new Error('Error here !');
+  };
+  handleClick = () => {
+    console.log('Test Button');
+    this.setError();
+    // throw new Error('Not a correct click');
+  };
+
   render() {
     return (
-      <div className="container">
-        <Searchbar onSubmit={this.handleSubmit} />
-        {this.state.gallery.length ? (
+      <ErrorBoundary>
+        <div className="container">
+          <Searchbar onSubmit={this.handleSubmit} />
+          <button type="button" onClick={this.handleClick}>
+            ErrorBUTTON
+          </button>
           <Gallery items={this.state.gallery} />
-        ) : (
-          <GalleryItem
-            name={this.state.item.name}
-            classification={this.state.item.classification}
-            language={this.state.item.language}
-            skin_colors={this.state.item.skin_colors}
-          />
-        )}
-      </div>
+          {/* <ErrorBoundary> */}
+        </div>{' '}
+      </ErrorBoundary>
     );
   }
 }
