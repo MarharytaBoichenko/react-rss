@@ -10,22 +10,10 @@ type GalleryState = {
 };
 
 export default class Gallery extends React.Component<GalleryProps, GalleryState> {
-  setError = () => {
-    throw new Error('Error here !');
-  };
-  // handleClick = () => {
-  //   console.log('Test Button');
-  //   this.state = { error: true };
-  //   // throw new Error('Not a correct click');
-  // };
   render() {
     const { items } = this.props;
-    // this.setError();
     return (
       <div>
-        {/* <button type="button" onClick={this.setError}>
-          ErrorBUTTON
-        </button> */}
         <ul className={s.gallery}>
           {items.map(({ name, created, classification, language, skin_colors }) => {
             return (

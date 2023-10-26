@@ -1,8 +1,8 @@
 import React from 'react';
-import './App.css';
+import s from './App.module.css';
 import Searchbar from './components/Searchbar/Searchbar';
 import Gallery from './components/Gallery/Gallery';
-import GalleryItem from './components/GalleryItem/GalleryItem';
+import Loader from './components/Loader/Loader';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import api from './components/api';
 
@@ -13,18 +13,13 @@ type AppProps = {
 type AppState = {
   query: string;
   gallery: [];
-  item: {
-    name?: string;
-    classification?: string;
-    language?: string;
-    skin_colors?: string;
-  };
+  isLoading: boolean;
 };
 class App extends React.Component<AppProps, AppState> {
   state: AppState = {
     query: '',
     gallery: [],
-    item: {},
+    isLoading: false,
   };
 
   componentDidMount(): void {
@@ -68,36 +63,42 @@ class App extends React.Component<AppProps, AppState> {
   getData = (dataForSearch: string) => {
     console.log('dataForSearch', dataForSearch);
     console.log('this.state.query', this.state.query);
-    api.fetchDataBySearch(dataForSearch).then((data) => {
-      console.log('etchDataBySearch', data);
-      // this.setState({
-      //   item: data.results[0],
-      // });
-      this.setState({
-        gallery: data.results,
-      });
-    });
+    this.setState({ isLoading: true });
+    api
+      .fetchDataBySearch(dataForSearch)
+      .then((data) => {
+        console.log('etchDataBySearch', data);
+        if (data.results.length === 0) {
+          console.log('No data  for  your query');
+          return;
+        }
+        this.setState({
+          gallery: data.results,
+          isLoading: false,
+        });
+      })
+      .catch((error) => console.log(error));
   };
 
   setError = () => {
     throw new Error('Error here !');
   };
+
   handleClick = () => {
     console.log('Test Button');
     this.setError();
-    // throw new Error('Not a correct click');
   };
 
   render() {
     return (
       <ErrorBoundary>
-        <div className="container">
+        <div className={s.container}>
           <Searchbar onSubmit={this.handleSubmit} />
-          <button type="button" onClick={this.handleClick}>
+          <button type="button" className={s.button} onClick={this.handleClick}>
             ErrorBUTTON
           </button>
+          {this.state.isLoading && <Loader />}
           <Gallery items={this.state.gallery} />
-          {/* <ErrorBoundary> */}
         </div>{' '}
       </ErrorBoundary>
     );
