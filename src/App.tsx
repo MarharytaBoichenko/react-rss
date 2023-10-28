@@ -1,10 +1,11 @@
 import React from 'react';
 import s from './App.module.css';
 import Searchbar from './components/Searchbar/Searchbar';
-import Gallery from './components/Gallery/Gallery';
+import { Gallery } from './components/Gallery/Gallery';
 import Loader from './components/Loader/Loader';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import api from './components/api';
+import { ErrorCard } from './components/ErrorCard/ErrorCard';
 
 type AppProps = {
   message?: string;
@@ -14,28 +15,35 @@ type AppState = {
   query: string;
   gallery: [];
   isLoading: boolean;
+  error: string;
 };
 class App extends React.Component<AppProps, AppState> {
   state: AppState = {
     query: '',
     gallery: [],
     isLoading: false,
+    error: '',
   };
 
   componentDidMount(): void {
     const firstPageQuery = localStorage.getItem('search');
-    console.log(firstPageQuery);
     if (!firstPageQuery) {
-      api.fetchListData().then((data) => {
-        console.log(data.results);
-        console.log('in if');
-        this.setState({
-          gallery: data.results,
-        });
+      this.setState({
+        isLoading: true,
+        error: '',
       });
+      api
+        .fetchListData()
+        .then((data) => {
+          this.setState({
+            gallery: data.results,
+            isLoading: false,
+          });
+        })
+        .catch((error) => this.setState({ error: error }))
+        .finally(() => this.setState({ isLoading: false }));
     } else {
       this.setState({ query: firstPageQuery });
-      console.log('in else');
       this.getData(firstPageQuery);
     }
   }
@@ -43,44 +51,39 @@ class App extends React.Component<AppProps, AppState> {
   componentDidUpdate(prevProps: Readonly<AppProps>, prevState: Readonly<AppState>): void {
     const prevQuery = prevState.query;
     const newQuery = this.state.query;
-    console.log(prevQuery);
-    console.log(newQuery);
-
     if (prevQuery !== newQuery) {
-      console.log('we need  new search');
       this.getData(newQuery);
     }
   }
 
-  handleSubmit = (searchQuery: { query: string }) => {
-    console.log('searchQuery in handleSubmit', searchQuery);
+  handleSubmit = (searchQuery: { query: string }): void => {
     this.setState({
       query: searchQuery.query,
       gallery: [],
     });
   };
 
-  getData = (dataForSearch: string) => {
-    console.log('dataForSearch', dataForSearch);
-    console.log('this.state.query', this.state.query);
-    this.setState({ isLoading: true });
+  getData = (dataForSearch: string): void => {
+    this.setState({
+      isLoading: true,
+      error: '',
+    });
     api
       .fetchDataBySearch(dataForSearch)
       .then((data) => {
-        console.log('etchDataBySearch', data);
         if (data.results.length === 0) {
-          console.log('No data  for  your query');
-          return;
+          return Promise.reject('No data  for  your query');
         }
         this.setState({
           gallery: data.results,
           isLoading: false,
         });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => this.setState({ error: error }))
+      .finally(() => this.setState({ isLoading: false }));
   };
 
-  setError = () => {
+  setError = (): void => {
     throw new Error('Error here !');
   };
 
@@ -97,9 +100,10 @@ class App extends React.Component<AppProps, AppState> {
           <button type="button" className={s.button} onClick={this.handleClick}>
             ErrorBUTTON
           </button>
+          {this.state.error && <ErrorCard>{this.state.error}</ErrorCard>}
           {this.state.isLoading && <Loader />}
-          <Gallery items={this.state.gallery} />
-        </div>{' '}
+          {this.state.gallery.length > 0 && <Gallery items={this.state.gallery} />}
+        </div>
       </ErrorBoundary>
     );
   }
