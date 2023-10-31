@@ -1,9 +1,9 @@
 import { Component } from 'react';
-import s from './Loader.module.css';
+import styles from './Loader.module.css';
 
 class Loader extends Component {
   render() {
-    return <div className={s.loader}></div>;
+    return <div className={styles.loader}></div>;
   }
 }
 export default Loader;

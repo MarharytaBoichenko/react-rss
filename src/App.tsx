@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './App.module.css';
+import styles from './App.module.css';
 import Searchbar from './components/Searchbar/Searchbar';
 import { Gallery } from './components/Gallery/Gallery';
 import Loader from './components/Loader/Loader';
@@ -95,9 +95,9 @@ class App extends React.Component<AppProps, AppState> {
   render() {
     return (
       <ErrorBoundary>
-        <div className={s.container}>
+        <div className={styles.container}>
           <Searchbar onSubmit={this.handleSubmit} />
-          <button type="button" className={s.button} onClick={this.handleClick}>
+          <button type="button" className={styles.button} onClick={this.handleClick}>
             ErrorBUTTON
           </button>
           {this.state.error && <ErrorCard>{this.state.error}</ErrorCard>}
