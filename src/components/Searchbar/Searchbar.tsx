@@ -33,6 +33,7 @@ class Searchbar extends React.Component<SearchbarProps, SearchbarState> {
 
   formSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
+    console.log(' click searchBTN');
     this.props.onSubmit(this.state);
     localStorage.setItem('search', this.state.query);
     this.setState({

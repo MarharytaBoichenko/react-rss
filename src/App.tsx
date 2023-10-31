@@ -58,7 +58,7 @@ class App extends React.Component<AppProps, AppState> {
   handleSubmit = (searchQuery: { query: string }): void => {
     this.setState({
       query: searchQuery.query,
-      gallery: [],
+      // gallery: [],
     });
   };
 
@@ -93,10 +93,10 @@ class App extends React.Component<AppProps, AppState> {
           ErrorBUTTON
         </button>
         {this.state.isLoading && <Loader />}
-        {this.state.gallery.length > 0 ? (
+        {this.state.gallery.length === 0 && !this.state.isLoading && <ErrorCard>No info</ErrorCard>}
+
+        {this.state.gallery.length > 0 && !this.state.isLoading && (
           <Gallery items={this.state.gallery} />
-        ) : (
-          <ErrorCard>No info</ErrorCard>
         )}
       </div>
     );
