@@ -1,4 +1,5 @@
 import React, { ErrorInfo, ReactNode } from 'react';
+import styles from './../ErrorCard/ErrorCard.module.css';
 
 type ErrorProps = {
   children?: ReactNode;
@@ -23,9 +24,8 @@ export default class ErrorBoundary extends React.Component<ErrorProps, ErrorStat
   }
 
   render() {
-    console.log(this.state.hasError);
     if (this.state.hasError) {
-      return <h1>Sorry.. there was an error</h1>;
+      return <h1 className={styles.error}>Sorry.. there was an error</h1>;
     }
     return this.props.children;
   }

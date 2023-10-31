@@ -3,7 +3,6 @@ import styles from './App.module.css';
 import Searchbar from './components/Searchbar/Searchbar';
 import { Gallery } from './components/Gallery/Gallery';
 import Loader from './components/Loader/Loader';
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import api from './components/api';
 import { ErrorCard } from './components/ErrorCard/ErrorCard';
 
@@ -15,14 +14,14 @@ type AppState = {
   query: string;
   gallery: [];
   isLoading: boolean;
-  error: string;
+  hasError: boolean;
 };
 class App extends React.Component<AppProps, AppState> {
   state: AppState = {
     query: '',
     gallery: [],
     isLoading: false,
-    error: '',
+    hasError: false,
   };
 
   componentDidMount(): void {
@@ -30,7 +29,7 @@ class App extends React.Component<AppProps, AppState> {
     if (!firstPageQuery) {
       this.setState({
         isLoading: true,
-        error: '',
+        hasError: false,
       });
       api
         .fetchListData()
@@ -40,7 +39,7 @@ class App extends React.Component<AppProps, AppState> {
             isLoading: false,
           });
         })
-        .catch((error) => this.setState({ error: error }))
+        .catch((error) => console.error(error))
         .finally(() => this.setState({ isLoading: false }));
     } else {
       this.setState({ query: firstPageQuery });
@@ -66,45 +65,40 @@ class App extends React.Component<AppProps, AppState> {
   getData = (dataForSearch: string): void => {
     this.setState({
       isLoading: true,
-      error: '',
+      hasError: false,
     });
     api
       .fetchDataBySearch(dataForSearch)
       .then((data) => {
-        if (data.results.length === 0) {
-          return Promise.reject('No data  for  your query');
-        }
         this.setState({
           gallery: data.results,
           isLoading: false,
         });
       })
-      .catch((error) => this.setState({ error: error }))
+      .catch((error) => console.error(error))
       .finally(() => this.setState({ isLoading: false }));
   };
 
-  setError = (): void => {
-    throw new Error('Error here !');
-  };
-
   handleClick = () => {
-    console.log('Test Button');
-    this.setError();
+    console.log('Error Button');
+    this.setState({ hasError: true });
   };
 
   render() {
+    if (this.state.hasError) throw new Error('Thrown error');
     return (
-      <ErrorBoundary>
-        <div className={styles.container}>
-          <Searchbar onSubmit={this.handleSubmit} />
-          <button type="button" className={styles.button} onClick={this.handleClick}>
-            ErrorBUTTON
-          </button>
-          {this.state.error && <ErrorCard>{this.state.error}</ErrorCard>}
-          {this.state.isLoading && <Loader />}
-          {this.state.gallery.length > 0 && <Gallery items={this.state.gallery} />}
-        </div>
-      </ErrorBoundary>
+      <div className={styles.container}>
+        <Searchbar onSubmit={this.handleSubmit} />
+        <button type="button" className={styles.button} onClick={this.handleClick}>
+          ErrorBUTTON
+        </button>
+        {this.state.isLoading && <Loader />}
+        {this.state.gallery.length > 0 ? (
+          <Gallery items={this.state.gallery} />
+        ) : (
+          <ErrorCard>No info</ErrorCard>
+        )}
+      </div>
     );
   }
 }
