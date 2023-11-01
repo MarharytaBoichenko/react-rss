@@ -6,100 +6,87 @@ import Loader from './components/Loader/Loader';
 import api from './components/api';
 import { ErrorCard } from './components/ErrorCard/ErrorCard';
 
-type AppProps = {
-  message?: string;
-};
+// type AppState = {
+//   query: string;
+//   gallery: [];
+//   isLoading: boolean;
+//   hasError: boolean;
+// };
 
-type AppState = {
-  query: string;
-  gallery: [];
-  isLoading: boolean;
-  hasError: boolean;
-};
-class App extends React.Component<AppProps, AppState> {
-  state: AppState = {
-    query: '',
-    gallery: [],
-    isLoading: false,
-    hasError: false,
-  };
+const App = () => {
+  const [query, setQuery] = useState('');
+  const [gallery, setGallery] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
-  componentDidMount(): void {
+  useEffect(() => {
     const firstPageQuery = localStorage.getItem('search');
-    if (!firstPageQuery) {
-      this.setState({
-        isLoading: true,
-        hasError: false,
-      });
-      api
-        .fetchListData()
-        .then((data) => {
-          this.setState({
-            gallery: data.results,
-            isLoading: false,
-          });
-        })
-        .catch((error) => console.error(error))
-        .finally(() => this.setState({ isLoading: false }));
-    } else {
-      this.setState({ query: firstPageQuery });
-      this.getData(firstPageQuery);
-    }
-  }
-
-  componentDidUpdate(prevProps: Readonly<AppProps>, prevState: Readonly<AppState>): void {
-    const prevQuery = prevState.query;
-    const newQuery = this.state.query;
-    if (prevQuery !== newQuery) {
-      this.getData(newQuery);
-    }
-  }
-
-  handleSubmit = (searchQuery: { query: string }): void => {
-    this.setState({
-      query: searchQuery.query,
-      // gallery: [],
-    });
-  };
-
-  getData = (dataForSearch: string): void => {
-    this.setState({
-      isLoading: true,
-      hasError: false,
-    });
-    api
-      .fetchDataBySearch(dataForSearch)
+    console.log('isINLS firstPageQuery', firstPageQuery);
+    setIsLoading(true);
+    setHasError(false);
+    if (firstPageQuery) setQuery(firstPageQuery);
+    (!firstPageQuery ? api.fetchListData() : api.fetchDataBySearch(firstPageQuery))
       .then((data) => {
-        this.setState({
-          gallery: data.results,
-          isLoading: false,
-        });
+        setGallery(data.results);
+        setIsLoading(false);
       })
       .catch((error) => console.error(error))
-      .finally(() => this.setState({ isLoading: false }));
+      .finally(() => setIsLoading(false));
+
+    // if (!firstPageQuery) {
+    //   console.log('fetch all list');
+    //   api
+    //     .fetchListData()
+    //     .then((data) => {
+    //       setGallery(data.results);
+    //       setIsLoading(false);
+    //     })
+    //     .catch((error) => console.error(error))
+    //     .finally(() => setIsLoading(false));
+    // } else {
+    //   console.log('fetch for firstPageQuery');
+    //   setQuery(firstPageQuery);
+    //   getData(firstPageQuery);
+    // }
+  }, [query]);
+
+  const handleSubmit = (searchQuery: string): void => {
+    console.log('searchQuery in handleSubmit', searchQuery);
+    setQuery(searchQuery);
   };
 
-  handleClick = () => {
+  // const getData = (dataForSearch: string): void => {
+  //   setIsLoading(true);
+  //   setHasError(false);
+
+  //   api
+  //     .fetchDataBySearch(dataForSearch)
+  //     .then((data) => {
+  //       setGallery(data.results);
+  //       setIsLoading(false);
+  //     })
+  //     .catch((error) => console.error(error))
+  //     .finally(() => setIsLoading(false));
+  // };
+
+  const handleClick = () => {
     console.log('Error Button');
-    this.setState({ hasError: true });
+    setHasError(true);
   };
 
-  render() {
-    if (this.state.hasError) throw new Error('Thrown error');
-    return (
-      <div className={styles.container}>
-        <Searchbar onSubmit={this.handleSubmit} />
-        <button type="button" className={styles.button} onClick={this.handleClick}>
-          ErrorBUTTON
-        </button>
-        {this.state.isLoading && <Loader />}
-        {this.state.gallery.length === 0 && !this.state.isLoading && <ErrorCard>No info</ErrorCard>}
+  if (hasError) throw new Error('Thrown error');
+  return (
+    <div className={styles.container}>
+      <Searchbar onSubmit={handleSubmit} />
+      <button type="button" className={styles.button} onClick={handleClick}>
+        ErrorBUTTON
+      </button>
+      {isLoading && <Loader />}
+      {gallery.length === 0 && !isLoading && <ErrorCard>No info</ErrorCard>}
 
-        {this.state.gallery.length > 0 && !this.state.isLoading && (
-          <Gallery items={this.state.gallery} />
-        )}
-      </div>
-    );
-  }
-}
+      {gallery.length > 0 && !isLoading && <Gallery items={gallery} />}
+    </div>
+  );
+};
+
 export default App;

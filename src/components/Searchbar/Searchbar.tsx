@@ -11,15 +11,15 @@ type SearchbarState = {
 const Searchbar = ({ onSubmit }: SearchbarProps) => {
   const [query, setQuery] = useState(localStorage.getItem('search') || '');
 
-  useEffect(() => {
-    const queryFromLS = localStorage.getItem('search');
+  // useEffect(() => {
+  //   const queryFromLS = localStorage.getItem('search');
 
-    if (queryFromLS) {
-      setQuery(queryFromLS);
-    } else {
-      setQuery('');
-    }
-  }, []);
+  //   if (queryFromLS) {
+  //     setQuery(queryFromLS);
+  //   } else {
+  //     setQuery('');
+  //   }
+  // }, []);
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
