@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './App.module.css';
 import Searchbar from './components/Searchbar/Searchbar';
 import { Gallery } from './components/Gallery/Gallery';

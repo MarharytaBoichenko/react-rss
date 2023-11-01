@@ -1,63 +1,54 @@
-import React, { ChangeEvent, FormEvent } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import styles from './Searchbar.module.css';
 
 type SearchbarProps = {
-  onSubmit: (data: { query: string }) => void;
+  onSubmit: (data: string) => void;
 };
 type SearchbarState = {
   query: string;
 };
 
-class Searchbar extends React.Component<SearchbarProps, SearchbarState> {
-  state = {
-    query: '',
-  };
+const Searchbar = ({ onSubmit }: SearchbarProps) => {
+  const [query, setQuery] = useState(localStorage.getItem('search') || '');
 
-  componentDidMount(): void {
+  useEffect(() => {
     const queryFromLS = localStorage.getItem('search');
+
     if (queryFromLS) {
-      this.setState({
-        query: queryFromLS,
-      });
+      setQuery(queryFromLS);
     } else {
-      this.setState({
-        query: '',
-      });
+      setQuery('');
     }
-  }
-  onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      query: e.target.value,
-    });
+  }, []);
+
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
   };
 
-  formSubmitHandler = (e: FormEvent) => {
+  const formSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
     console.log(' click searchBTN');
-    this.props.onSubmit(this.state);
-    localStorage.setItem('search', this.state.query);
-    this.setState({
-      query: '',
-    });
+    console.log(query);
+    onSubmit(query);
+    localStorage.setItem('search', query);
+    setQuery('');
   };
+  return (
+    <header className={styles.searchbar}>
+      <form className={styles.searchForm} onSubmit={formSubmitHandler}>
+        <button type="submit" className={styles.searchForm__button}></button>
+        <input
+          className={styles.searchForm__input}
+          type="text"
+          onChange={onChangeHandler}
+          autoComplete="off"
+          autoFocus
+          placeholder="Enter your query"
+          value={query}
+        />
+      </form>
+    </header>
+  );
+};
 
-  render() {
-    return (
-      <header className={styles.searchbar}>
-        <form className={styles.searchForm} onSubmit={this.formSubmitHandler}>
-          <button type="submit" className={styles.searchForm__button}></button>
-          <input
-            className={styles.searchForm__input}
-            type="text"
-            onChange={this.onChangeHandler}
-            autoComplete="off"
-            autoFocus
-            placeholder="Enter your query"
-            value={this.state.query}
-          />
-        </form>
-      </header>
-    );
-  }
-}
 export default Searchbar;
