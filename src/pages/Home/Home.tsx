@@ -14,7 +14,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const [isItemOpened, setIsItemOpened] = useState(false);
   const skip = itemsPerPage * (currentPage - 1);
   const total = 100;
