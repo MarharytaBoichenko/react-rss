@@ -1,8 +1,21 @@
+import { FormEvent } from 'react';
 export type ItemProps = {
-  name?: string;
-  gender?: string;
-  hair_color?: string;
-  eye_color?: string;
-  mass?: string;
-  created?: string;
+  title?: string;
+  price?: string;
+  rating?: string;
+  category?: string;
+  discountPercentage?: string;
+  description?: string;
+  brand?: string;
+  id: string;
+};
+
+export type PaginationProps = {
+  pagesQuantity: number;
+  currentPage: number;
+  setCurrentPage: (data: number) => void;
+};
+
+export type SelectProps = {
+  handleSelect: (event: FormEvent<HTMLSelectElement>) => void;
 };

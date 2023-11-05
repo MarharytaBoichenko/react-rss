@@ -18,3 +18,8 @@
   background-color: var(--main-color);
   font-size: 1.8rem;
 }
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  /* display: flex; */
+}

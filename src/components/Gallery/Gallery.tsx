@@ -1,26 +1,38 @@
+import { Link } from 'react-router-dom';
 import styles from './Gallery.module.css';
 import { GalleryItem } from '../GalleryItem/GalleryItem';
 import { ItemProps } from '../types';
 
 type GalleryProps = {
   items: ItemProps[];
+  isItemOpened: boolean;
+  onClick: () => void;
 };
 
-export const Gallery = ({ items }: GalleryProps) => {
+export const Gallery = ({ items, isItemOpened, onClick }: GalleryProps) => {
   return (
-    <div>
-      <ul className={styles.gallery}>
-        {items.map(({ name, gender, hair_color, eye_color, mass, created }) => {
+    <div onClick={onClick}>
+      <ul className={isItemOpened ? styles.gallery : styles.overlay}>
+        {items.map(({ title, price, rating, category, id }) => {
           return (
-            <li className={styles.gallery__item} key={created}>
-              <GalleryItem
-                name={name}
-                gender={gender}
-                hair_color={hair_color}
-                eye_color={eye_color}
-                mass={mass}
-              />
-            </li>
+            <Link
+              to={`product/${id}`}
+              state={{ from: '/product' }}
+              key={id}
+              onClick={(e) => {
+                isItemOpened ? e.preventDefault() : console.log('fgdfg');
+              }}
+            >
+              <li className={styles.gallery__item}>
+                <GalleryItem
+                  title={title}
+                  price={price}
+                  rating={rating}
+                  category={category}
+                  id={id}
+                />
+              </li>
+            </Link>
           );
         })}
       </ul>

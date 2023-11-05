@@ -1,27 +1,23 @@
 import styles from './GalleryItem.module.css';
 import { ItemProps } from '../types';
 
-export const GalleryItem = ({ name, gender, hair_color, eye_color, mass }: ItemProps) => {
+export const GalleryItem = ({ title, price, rating, category }: ItemProps) => {
   return (
     <ul className={styles.description}>
       <li>
-        <span className={styles.label}>Name: </span> {name}
+        <span className={styles.label}>Title: </span> {title}
       </li>
       <li>
-        <span className={styles.label}>Gender: </span>
-        {gender}
+        <span className={styles.label}>Price: </span>
+        {price}
       </li>
       <li>
-        <span className={styles.label}> Hair color: </span>
-        {hair_color}
+        <span className={styles.label}> Rating: </span>
+        {rating}
       </li>
       <li>
-        <span className={styles.label}>Eye color: </span>
-        {eye_color}
-      </li>
-      <li>
-        <span className={styles.label}>Mass: </span>
-        {mass}
+        <span className={styles.label}>Category: </span>
+        {category}
       </li>
     </ul>
   );

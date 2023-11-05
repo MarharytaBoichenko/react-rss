@@ -1,25 +1,20 @@
-import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
+import { ChangeEvent, FormEvent, useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import styles from './Searchbar.module.css';
 
-type SearchbarProps = {
-  onSubmit: (data: string) => void;
-};
-type SearchbarState = {
-  query: string;
-};
-
-const Searchbar = ({ onSubmit }: SearchbarProps) => {
+const Searchbar = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  console.log(searchParams.get('search'));
   const [query, setQuery] = useState(localStorage.getItem('search') || '');
+  console.log(localStorage.getItem('search'));
 
-  // useEffect(() => {
-  //   const queryFromLS = localStorage.getItem('search');
-
-  //   if (queryFromLS) {
-  //     setQuery(queryFromLS);
-  //   } else {
-  //     setQuery('');
-  //   }
-  // }, []);
+  useEffect(() => {
+    console.log('in search');
+    if (!searchParams.get('search')) {
+      console.log('in if search');
+      setQuery('');
+    }
+  }, [searchParams]);
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -29,7 +24,7 @@ const Searchbar = ({ onSubmit }: SearchbarProps) => {
     e.preventDefault();
     console.log(' click searchBTN');
     console.log(query);
-    onSubmit(query);
+    setSearchParams({ search: query });
     localStorage.setItem('search', query);
     setQuery('');
   };
