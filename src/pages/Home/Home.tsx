@@ -24,10 +24,8 @@ const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const searchQuery = searchParams.get('search' || '');
-  console.log(searchQuery);
+  const firstPageQuery = searchQuery || localStorage.getItem('search');
   useEffect(() => {
-    const firstPageQuery = searchQuery || localStorage.getItem('search');
-    console.log('isINLS firstPageQuery', firstPageQuery);
     setIsLoading(true);
     setHasError(false);
     !firstPageQuery ? getAlLData() : getDataBySearch(firstPageQuery);
@@ -38,9 +36,8 @@ const Home = () => {
     console.log('in second useefffect');
     setIsLoading(true);
     setHasError(false);
-    console.log(!searchQuery);
-    !searchQuery ? getAlLData() : getDataBySearch(searchQuery);
-  }, [currentPage, searchQuery]);
+    !firstPageQuery ? getAlLData() : getDataBySearch(firstPageQuery);
+  }, [currentPage, firstPageQuery]);
 
   const getAlLData = () => {
     api
@@ -49,7 +46,7 @@ const Home = () => {
         setGallery(data.products);
         setIsLoading(false);
 
-        setSearchParams({});
+        setSearchParams({ search: '' });
       })
       .catch((error) => console.error(error))
       .finally(() => setIsLoading(false));
@@ -63,7 +60,7 @@ const Home = () => {
         setIsLoading(false);
         setCurrentPage(1);
         if (firstPageQuery === '' || firstPageQuery === null) {
-          setSearchParams({});
+          setSearchParams({ search: '' });
         } else {
           setSearchParams({ search: firstPageQuery });
         }
@@ -73,8 +70,6 @@ const Home = () => {
   };
 
   useEffect(() => {
-    console.log('changed itemsPerPage');
-
     api
       .fetchListData(itemsPerPage, 0)
       .then((data) => {
@@ -85,6 +80,7 @@ const Home = () => {
       })
       .catch((error) => console.error(error))
       .finally(() => setIsLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemsPerPage]);
 
   const handleClick = () => {
@@ -93,13 +89,11 @@ const Home = () => {
   };
 
   const handleSelect = (e: FormEvent<HTMLSelectElement>) => {
-    console.log(searchParams);
     setItemsPerPage(Number((e.target as HTMLSelectElement).value));
   };
 
   const handleGalleryClick = () => {
     if (location.pathname !== '/') navigate('/');
-    console.log('after if');
   };
   if (hasError) throw new Error('Thrown error');
   return (

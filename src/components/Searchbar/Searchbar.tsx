@@ -4,14 +4,11 @@ import styles from './Searchbar.module.css';
 
 const Searchbar = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  console.log(searchParams.get('search'));
   const [query, setQuery] = useState(localStorage.getItem('search') || '');
-  console.log(localStorage.getItem('search'));
 
   useEffect(() => {
     console.log('in search');
     if (!searchParams.get('search')) {
-      console.log('in if search');
       setQuery('');
     }
   }, [searchParams]);
@@ -22,11 +19,8 @@ const Searchbar = () => {
 
   const formSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
-    console.log(' click searchBTN');
-    console.log(query);
     setSearchParams({ search: query });
     localStorage.setItem('search', query);
-    setQuery('');
   };
   return (
     <header className={styles.searchbar}>
