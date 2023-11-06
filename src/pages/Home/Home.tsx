@@ -15,7 +15,7 @@ const Home = () => {
   const [hasError, setHasError] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
-  const [isItemOpened, setIsItemOpened] = useState(false);
+  const [isItemOpened, _] = useState(false);
   const skip = itemsPerPage * (currentPage - 1);
   const total = 100;
   const pagesQuantity: number = total / itemsPerPage;
@@ -37,6 +37,7 @@ const Home = () => {
     setIsLoading(true);
     setHasError(false);
     !firstPageQuery ? getAlLData() : getDataBySearch(firstPageQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, firstPageQuery]);
 
   const getAlLData = () => {
