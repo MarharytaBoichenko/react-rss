@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent, ReactNode } from 'react';
 export type ItemProps = {
   title?: string;
   price?: string;
@@ -18,4 +18,14 @@ export type PaginationProps = {
 
 export type SelectProps = {
   handleSelect: (event: FormEvent<HTMLSelectElement>) => void;
+};
+
+export type AppContextType = {
+  gallery: ItemProps[];
+  search: string | null;
+  isGallery: (data: []) => void;
+};
+
+export type ContextProps = {
+  children: ReactNode;
 };
