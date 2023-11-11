@@ -4,19 +4,17 @@ import { AppContextType, ContextProps } from './../types';
 const initialContext = {
   gallery: [],
   search: '',
-  isGallery: (galery: []) => console.log('items'),
+  setGallery: () => [],
+  setSearch: () => '',
 };
+
 export const AppContext = createContext<AppContextType>(initialContext);
 
 const AppContextProvider = ({ children }: ContextProps) => {
   const [gallery, setGallery] = useState([]);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(localStorage.getItem('search'));
 
-  const isGallery = (data: []) => {
-    setGallery(data);
-  };
-
-  const value = { gallery: gallery, search: search, isGallery };
+  const value = { gallery, search, setGallery, setSearch };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 

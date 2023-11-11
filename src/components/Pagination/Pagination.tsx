@@ -1,18 +1,16 @@
 import { useLocation } from 'react-router-dom';
 import { PaginationProps } from '../types';
 import styles from '../Pagination/Pagination.module.css';
+
 const Pagination = ({ pagesQuantity, currentPage, setCurrentPage }: PaginationProps) => {
   const location = useLocation();
   const handlePrev = () => {
-    console.log('handlePrev');
     if (currentPage !== 1) setCurrentPage(currentPage - 1);
   };
   const handleNext = () => {
-    console.log('handleNext');
     if (currentPage !== pagesQuantity) setCurrentPage(currentPage + 1);
   };
 
-  console.log(currentPage);
   return (
     <div className={styles.pagination}>
       <button

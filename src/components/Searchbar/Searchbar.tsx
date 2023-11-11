@@ -1,25 +1,22 @@
-import { ChangeEvent, FormEvent, useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { ChangeEvent, FormEvent, useState, useContext, useEffect } from 'react';
 import styles from './Searchbar.module.css';
+import { AppContext } from './../AppContext/AppContextProvider';
 
 const Searchbar = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(localStorage.getItem('search') || '');
-
-  useEffect(() => {
-    console.log('in search');
-    if (!searchParams.get('search')) {
-      setQuery('');
-    }
-  }, [searchParams]);
+  const { search, setSearch } = useContext(AppContext);
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 
+  useEffect(() => {
+    setQuery(search || '');
+  }, [search]);
+
   const formSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
-    setSearchParams({ search: query });
+    setSearch(query);
     localStorage.setItem('search', query);
   };
   return (

@@ -16,7 +16,6 @@ const Details = () => {
     setLoading(true);
     if (id)
       api.fetchOnePerson(id).then((data) => {
-        console.log(data);
         setProduct(data);
         setLoading(false);
       });

@@ -1,7 +1,5 @@
 import styles from './ErrorCard.module.css';
-type ErrorCardProps = {
-  children: string;
-};
+import { ErrorCardProps } from '../types';
 
 export const ErrorCard = ({ children }: ErrorCardProps) => {
   return <div className={styles.error}>{children}</div>;

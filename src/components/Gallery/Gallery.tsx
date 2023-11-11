@@ -2,13 +2,8 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Gallery.module.css';
 import { GalleryItem } from '../GalleryItem/GalleryItem';
-// import { ItemProps } from '../types';
 import { AppContext } from '../AppContext/AppContextProvider';
-
-type GalleryProps = {
-  isItemOpened: boolean;
-  onClick: () => void;
-};
+import { GalleryProps } from './../types';
 
 export const Gallery = ({ isItemOpened, onClick }: GalleryProps) => {
   const { gallery } = useContext(AppContext);
@@ -22,7 +17,7 @@ export const Gallery = ({ isItemOpened, onClick }: GalleryProps) => {
               state={{ from: '/product' }}
               key={id}
               onClick={(e) => {
-                isItemOpened ? e.preventDefault() : console.log('fgdfg');
+                isItemOpened ? e.preventDefault() : console.log('not opened');
               }}
             >
               <li className={styles.gallery__item}>

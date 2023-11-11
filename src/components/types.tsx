@@ -10,6 +10,10 @@ export type ItemProps = {
   id: string;
 };
 
+export type ErrorCardProps = {
+  children: string;
+};
+
 export type PaginationProps = {
   pagesQuantity: number;
   currentPage: number;
@@ -20,10 +24,16 @@ export type SelectProps = {
   handleSelect: (event: FormEvent<HTMLSelectElement>) => void;
 };
 
+export type GalleryProps = {
+  isItemOpened: boolean;
+  onClick: () => void;
+};
+
 export type AppContextType = {
   gallery: ItemProps[];
   search: string | null;
-  isGallery: (data: []) => void;
+  setGallery: (data: []) => void;
+  setSearch: (search: string) => void;
 };
 
 export type ContextProps = {
