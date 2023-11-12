@@ -1,0 +1,9 @@
+.header {
+  font-size: 3rem;
+  font-weight: 700;
+}
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
