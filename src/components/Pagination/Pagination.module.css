@@ -1,0 +1,28 @@
+@import '../../index.css';
+
+.prev,
+.next {
+  width: 60px;
+  height: 30px;
+  color: var(--accent-color);
+  background-color: var(--main-color);
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.current {
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 0px 20px;
+  padding: 10px;
+  color: var(--accent-color);
+  background-color: var(--main-color);
+  border-radius: 100%;
+  text-align: center;
+  font-weight: 700;
+}
+
+.pagination {
+  display: flex;
+}

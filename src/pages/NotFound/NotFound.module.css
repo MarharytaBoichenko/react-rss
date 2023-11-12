@@ -1,0 +1,10 @@
+.header {
+  font-size: 3rem;
+  font-weight: 700;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
