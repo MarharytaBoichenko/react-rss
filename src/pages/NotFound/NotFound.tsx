@@ -4,7 +4,9 @@ const NotFound = () => {
   return (
     <div className={styles.wrapper}>
       <h1 className={styles.header}> 404 Not Found </h1>
-      <Link to="/">Go home</Link>
+      <Link to="/">
+        <span>Go home</span>
+      </Link>
     </div>
   );
 };
