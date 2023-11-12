@@ -1,6 +1,6 @@
 {
   "name": "react-rss",
-  "homepage": "https://react-rss.vercel.app/",
+  "homepage": "https://react-rss.vercel.app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
