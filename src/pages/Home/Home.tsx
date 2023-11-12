@@ -28,8 +28,6 @@ const Home = () => {
   const { setGallery, gallery, search, setSearch } = useContext(AppContext) as AppContextType;
 
   const getAlLData = () => {
-    console.log('firstPageQuery all data');
-    console.log('firstMount.current', firstMount.current);
     api
       .fetchListData(itemsPerPage, skip)
       .then((data) => {
@@ -41,14 +39,9 @@ const Home = () => {
   };
 
   const getDataBySearch = (firstPageQuery: string | null) => {
-    console.log('firstMount.current', firstMount.current);
-    console.log('firstPageQuery by search', firstPageQuery);
     if (!firstPageQuery) {
-      console.log(!firstPageQuery);
-      console.log('in getDataBySearch', firstPageQuery);
       return;
     } else {
-      console.log('go to search by', firstPageQuery);
       api
         .fetchDataBySearch(firstPageQuery)
         .then((data) => {
@@ -64,19 +57,14 @@ const Home = () => {
 
   useLayoutEffect(() => {
     if (firstMount.current) {
-      console.log('firstMount.current', firstMount.current);
       !lsPageQuery ? getAlLData() : getDataBySearch(lsPageQuery);
       firstMount.current = false;
     } else {
-      console.log(firstMount.current);
-      console.log('in else');
-      console.log('from lS', localStorage.getItem('search'));
       setIsLoading(true);
       setHasError(false);
-      console.log('search', search);
-      console.log('! lsPageQuery', !lsPageQuery);
       !search ? getAlLData() : getDataBySearch(search);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, search, itemsPerPage]);
 
   const handleClick = () => {
