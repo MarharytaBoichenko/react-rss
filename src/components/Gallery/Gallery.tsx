@@ -1,25 +1,17 @@
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Gallery.module.css';
 import { GalleryItem } from '../GalleryItem/GalleryItem';
-import { AppContext } from '../AppContext/AppContextProvider';
 import { GalleryProps } from './../types';
 
-export const Gallery = ({ isItemOpened, onClick }: GalleryProps) => {
-  const { gallery } = useContext(AppContext);
+export const Gallery = ({ gallery, onClick }: GalleryProps) => {
+  const prevPath = `${location.pathname}${location.search}`;
   return (
     <div onClick={onClick}>
-      <ul className={isItemOpened ? styles.gallery : styles.overlay}>
+      {' '}
+      <ul className={styles.gallery}>
         {gallery.map(({ title, price, rating, category, id }) => {
           return (
-            <Link
-              to={`product/${id}`}
-              state={{ from: '/product' }}
-              key={id}
-              onClick={(e) => {
-                isItemOpened ? e.preventDefault() : console.log('not opened');
-              }}
-            >
+            <Link to={`product/${id}`} state={{ prevPath: prevPath }} key={id}>
               <li className={styles.gallery__item}>
                 <GalleryItem
                   title={title}
@@ -28,6 +20,7 @@ export const Gallery = ({ isItemOpened, onClick }: GalleryProps) => {
                   category={category}
                   id={id}
                 />
+                {/* <GalleryItem/> */}
               </li>
             </Link>
           );

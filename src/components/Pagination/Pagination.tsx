@@ -1,14 +1,19 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { PaginationProps } from '../types';
 import styles from '../Pagination/Pagination.module.css';
 
 const Pagination = ({ pagesQuantity, currentPage, setCurrentPage }: PaginationProps) => {
   const location = useLocation();
+  const [_searchParams, setSearchParams] = useSearchParams();
   const handlePrev = () => {
-    if (currentPage !== 1) setCurrentPage(currentPage - 1);
+    if (currentPage !== 1) {
+    }
+    setCurrentPage(currentPage - 1);
+    setSearchParams({ page: (currentPage - 1).toString() });
   };
   const handleNext = () => {
     if (currentPage !== pagesQuantity) setCurrentPage(currentPage + 1);
+    setSearchParams({ page: (currentPage + 1).toString() });
   };
 
   return (

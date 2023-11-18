@@ -1,41 +1,34 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { ItemProps } from '../../components/types';
-import api from '../../components/api';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { GalleryItemDetailed } from '../../components/GalleryItemDetailed/GalleryItemDetailed';
 import Loader from '../../components/Loader/Loader';
+import { useGetOneItemQuery } from '../../redux/gallerySlice';
+import { useAppDispatch } from '../../hooks/hooks';
 import styles from './Details.module.css';
+import { changeLoading } from '../../redux/loadingSlice';
 
 const Details = () => {
-  const [product, setProduct] = useState<ItemProps>();
-  const [loading, setLoading] = useState(false);
-  const { id } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const getPersonInfo = () => {
-    setLoading(true);
-    if (id)
-      api.fetchOnePerson(id).then((data) => {
-        setProduct(data);
-        setLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    if (id === '') return;
-    getPersonInfo();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { id } = useParams<{ id: string }>();
+  const { data: product, isLoading } = useGetOneItemQuery(id as string);
+  dispatch(changeLoading({ loading: isLoading }));
 
   const closeDetails = () => {
-    navigate('/');
+    console.log('clicked on close nav');
+    // navigate('/');
+    console.log(location.state?.prevPath);
+    console.log(window.location.search);
+    navigate(location.state?.prevPath);
   };
 
   return (
     <>
-      {loading && <Loader />}
-      {product && !loading && (
-        <div className={styles.overlay}>
+      {isLoading && <Loader position="right" />}
+      {product && !isLoading && (
+        <div>
+          <div className={styles.middleware} onClick={closeDetails}></div>
           <div className={styles.item_wrapper}>
             <button className={styles.close} type="button" onClick={closeDetails}>
               x

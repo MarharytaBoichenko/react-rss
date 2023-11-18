@@ -1,23 +1,27 @@
-import { ChangeEvent, FormEvent, useState, useContext, useEffect } from 'react';
+import { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import styles from './Searchbar.module.css';
-import { AppContext } from './../AppContext/AppContextProvider';
+import { changeSearch } from '../../redux/searchSlice';
+import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 
 const Searchbar = () => {
   const [query, setQuery] = useState(localStorage.getItem('search') || '');
-  const { search, setSearch } = useContext(AppContext);
+  const dispatch = useAppDispatch();
+  const searchState = useAppSelector((state) => state.search);
+  console.log('searchState', searchState);
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 
   useEffect(() => {
-    setQuery(search || '');
-  }, [search]);
+    setQuery(query || '');
+  }, [query]);
 
   const formSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
-    setSearch(query);
+    dispatch(changeSearch({ search: query }));
     localStorage.setItem('search', query);
+    setQuery('');
   };
   return (
     <header className={styles.searchbar}>

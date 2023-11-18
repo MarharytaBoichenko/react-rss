@@ -6,7 +6,11 @@
   height: 125px;
   animation: loading 2s linear infinite;
 }
-
+.right {
+  composes: loader;
+  /* margin-right: 20%; */
+  margin-left: 40%;
+}
 @keyframes loading {
   0% {
     transform: rotate(0deg);
