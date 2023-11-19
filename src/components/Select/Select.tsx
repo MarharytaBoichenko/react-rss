@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { SelectProps } from '../types';
 import styles from './Select.module.css';
 
-const Select = ({ handleSelect }: SelectProps) => {
+const Select: React.FC<SelectProps> = ({ handleSelect }) => {
   const location = useLocation();
   return (
     <div>

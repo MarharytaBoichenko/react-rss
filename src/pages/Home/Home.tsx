@@ -13,9 +13,9 @@ import { changeSearch } from '../../redux/searchSlice';
 import { changeQuantity } from '../../redux/itemPerPageSlice';
 import { changeMainLoading } from '../../redux/loadingSlice';
 
-const Home = () => {
-  const [hasError, setHasError] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+const Home: React.FC = () => {
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [_searchParams, setSearchParams] = useSearchParams();
   const total = 100;
 

@@ -11,7 +11,7 @@ export type ItemProps = {
 };
 
 export type Gallery = {
-  gallery: ItemProps[];
+  products: ItemProps[];
 };
 
 export type Search = {

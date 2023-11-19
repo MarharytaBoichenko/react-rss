@@ -3,8 +3,8 @@ import styles from './Searchbar.module.css';
 import { changeSearch } from '../../redux/searchSlice';
 import { useAppDispatch } from '../../hooks/hooks';
 
-const Searchbar = () => {
-  const [query, setQuery] = useState(localStorage.getItem('search') || '');
+const Searchbar: React.FC = () => {
+  const [query, setQuery] = useState<string>(localStorage.getItem('search') || '');
   const dispatch = useAppDispatch();
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {

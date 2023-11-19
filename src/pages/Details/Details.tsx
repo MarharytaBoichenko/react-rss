@@ -5,8 +5,9 @@ import { useGetOneItemQuery } from '../../redux/gallerySlice';
 import { useAppDispatch } from '../../hooks/hooks';
 import styles from './Details.module.css';
 import { changeDetailedLoading } from '../../redux/loadingSlice';
+import React from 'react';
 
-const Details = () => {
+const Details: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();

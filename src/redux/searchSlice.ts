@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { Search } from '../../components/types';
+import type { Search } from '../components/types';
 
 const initialState: Search = {
   search: '',

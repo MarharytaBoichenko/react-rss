@@ -3,7 +3,7 @@ import styles from './Gallery.module.css';
 import { GalleryItem } from '../GalleryItem/GalleryItem';
 import { GalleryProps } from './../types';
 
-export const Gallery = ({ gallery }: GalleryProps) => {
+export const Gallery: React.FC<GalleryProps> = ({ gallery }) => {
   const prevPath = `${location.pathname}${location.search}`;
   return (
     <div>

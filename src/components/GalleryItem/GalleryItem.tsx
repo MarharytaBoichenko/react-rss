@@ -1,7 +1,7 @@
 import styles from './GalleryItem.module.css';
 import { ItemProps } from '../types';
 
-export const GalleryItem = ({ title, price, rating, category }: ItemProps) => {
+export const GalleryItem: React.FC<ItemProps> = ({ title, price, rating, category }) => {
   return (
     <ul className={styles.description}>
       <li>

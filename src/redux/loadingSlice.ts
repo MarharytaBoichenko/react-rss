@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { Loading } from '../../components/types';
+import type { Loading } from '../components/types';
 
 const initialState: Loading = {
   loadingMain: false,

@@ -2,7 +2,7 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 import { PaginationProps } from '../types';
 import styles from '../Pagination/Pagination.module.css';
 
-const Pagination = ({ pagesQuantity, currentPage, setCurrentPage }: PaginationProps) => {
+const Pagination: React.FC<PaginationProps> = ({ pagesQuantity, currentPage, setCurrentPage }) => {
   const location = useLocation();
   const [_searchParams, setSearchParams] = useSearchParams();
   const handlePrev = () => {

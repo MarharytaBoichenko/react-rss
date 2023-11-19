@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { Quantity } from '../../components/types';
+import type { Quantity } from '../components/types';
 
 const initialState: Quantity = {
   quantity: 5,

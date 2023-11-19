@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { Gallery, ItemProps } from '../../components/types';
+import type { Gallery, ItemProps } from '../components/types';
 
-interface ListResponse<T> {
-  limit: string;
-  skip: string;
-  data: T[];
+interface ListResponse {
+  limit: number;
+  skip: number;
+  // data: T[];
   search: string;
 }
 
@@ -13,7 +13,7 @@ export const galleryApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'https://dummyjson.com/products' }),
   tagTypes: ['itemGAllery'],
   endpoints: (builder) => ({
-    getGalleryListSearch: builder.query({
+    getGalleryListSearch: builder.query<Gallery, ListResponse>({
       query: ({ limit, skip, search }) => `/search?q=${search}&limit=${limit}&skip=${skip}`,
       providesTags: ['itemGAllery'],
     }),
