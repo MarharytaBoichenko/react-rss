@@ -4,7 +4,6 @@ import type { Search } from '../components/types';
 const initialState: Search = {
   search: '',
 };
-console.log(initialState);
 const searchSlice = createSlice({
   name: 'search',
   initialState,

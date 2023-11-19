@@ -42,8 +42,6 @@ export type LoaderProps = {
 
 export type GalleryProps = {
   gallery: ItemProps[];
-  // isItemOpened: boolean;
-  onClick: () => void;
 };
 
 export type Loading = {

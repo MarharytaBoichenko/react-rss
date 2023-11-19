@@ -6,7 +6,7 @@ const initialState: Loading = {
 };
 
 const loadingSlice = createSlice({
-  name: 'quantity',
+  name: 'loading',
   initialState,
   reducers: {
     changeLoading: (state, action: PayloadAction<Loading>) => action.payload,

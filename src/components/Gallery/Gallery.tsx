@@ -3,11 +3,10 @@ import styles from './Gallery.module.css';
 import { GalleryItem } from '../GalleryItem/GalleryItem';
 import { GalleryProps } from './../types';
 
-export const Gallery = ({ gallery, onClick }: GalleryProps) => {
+export const Gallery = ({ gallery }: GalleryProps) => {
   const prevPath = `${location.pathname}${location.search}`;
   return (
-    <div onClick={onClick}>
-      {' '}
+    <div>
       <ul className={styles.gallery}>
         {gallery.map(({ title, price, rating, category, id }) => {
           return (
@@ -20,7 +19,6 @@ export const Gallery = ({ gallery, onClick }: GalleryProps) => {
                   category={category}
                   id={id}
                 />
-                {/* <GalleryItem/> */}
               </li>
             </Link>
           );

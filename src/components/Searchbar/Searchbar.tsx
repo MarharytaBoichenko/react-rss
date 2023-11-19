@@ -1,13 +1,11 @@
 import { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import styles from './Searchbar.module.css';
 import { changeSearch } from '../../redux/searchSlice';
-import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
+import { useAppDispatch } from '../../hooks/hooks';
 
 const Searchbar = () => {
   const [query, setQuery] = useState(localStorage.getItem('search') || '');
   const dispatch = useAppDispatch();
-  const searchState = useAppSelector((state) => state.search);
-  console.log('searchState', searchState);
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
