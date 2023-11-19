@@ -5,12 +5,7 @@ import loadingSlice from './loadingSlice';
 import { galleryApi } from './gallerySlice';
 
 const store = configureStore({
-  // reducer: {
-  //   gallery: gallerySlice,
-  //   // search: filtersReducer,
-  // },
   reducer: {
-    // Add the generated reducer as a specific top-level slice
     [galleryApi.reducerPath]: galleryApi.reducer,
     search: searchSlice,
     quantity: quantitySlice,

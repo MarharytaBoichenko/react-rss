@@ -4,7 +4,7 @@ import Loader from '../../components/Loader/Loader';
 import { useGetOneItemQuery } from '../../redux/gallerySlice';
 import { useAppDispatch } from '../../hooks/hooks';
 import styles from './Details.module.css';
-import { changeLoading } from '../../redux/loadingSlice';
+import { changeDetailedLoading } from '../../redux/loadingSlice';
 
 const Details = () => {
   const location = useLocation();
@@ -13,13 +13,9 @@ const Details = () => {
 
   const { id } = useParams<{ id: string }>();
   const { data: product, isLoading } = useGetOneItemQuery(id as string);
-  dispatch(changeLoading({ loading: isLoading }));
+  dispatch(changeDetailedLoading({ loadingMain: false, loadingDetailed: isLoading }));
 
   const closeDetails = () => {
-    console.log('clicked on close nav');
-    // navigate('/');
-    console.log(location.state?.prevPath);
-    console.log(window.location.search);
     navigate(location.state?.prevPath);
   };
 

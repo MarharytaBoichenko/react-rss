@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { Gallery, ItemProps } from '../components/types';
+import type { Gallery, ItemProps } from '../../components/types';
 
 interface ListResponse<T> {
   limit: string;
@@ -8,7 +8,6 @@ interface ListResponse<T> {
   search: string;
 }
 
-// Define a service using a base URL and expected endpoints
 export const galleryApi = createApi({
   reducerPath: 'gallery',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://dummyjson.com/products' }),

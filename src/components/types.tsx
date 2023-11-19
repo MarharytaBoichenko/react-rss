@@ -1,4 +1,4 @@
-import { FormEvent, ReactNode } from 'react';
+import { FormEvent } from 'react';
 export type ItemProps = {
   title?: string;
   price?: string;
@@ -45,5 +45,6 @@ export type GalleryProps = {
 };
 
 export type Loading = {
-  loading: boolean;
+  loadingMain: boolean;
+  loadingDetailed: boolean;
 };

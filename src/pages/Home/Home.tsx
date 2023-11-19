@@ -11,7 +11,7 @@ import { useGetGalleryListSearchQuery } from '../../redux/gallerySlice';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 import { changeSearch } from '../../redux/searchSlice';
 import { changeQuantity } from '../../redux/itemPerPageSlice';
-import { changeLoading } from '../../redux/loadingSlice';
+import { changeMainLoading } from '../../redux/loadingSlice';
 
 const Home = () => {
   const [hasError, setHasError] = useState(false);
@@ -22,7 +22,6 @@ const Home = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     const lsPageQuery = localStorage.getItem('search');
-    console.log(lsPageQuery);
     if (lsPageQuery) dispatch(changeSearch({ search: lsPageQuery }));
   }, [dispatch]);
 
@@ -32,22 +31,23 @@ const Home = () => {
   const skip = quantityState * (currentPage - 1);
   const pagesQuantity: number = total / quantityState;
 
-  const { products, isError, isLoadingProducts } = useGetGalleryListSearchQuery(
+  const { products, isError, isFetchingProducts } = useGetGalleryListSearchQuery(
     {
       limit: quantityState,
       skip: skip,
       search: searchState,
     },
     {
-      selectFromResult: ({ data, isLoading, isError }) => ({
+      selectFromResult: ({ data, isLoading, isError, isFetching }) => ({
         products: data?.products,
         isError: isError,
         isLoadingProducts: isLoading,
+        isFetchingProducts: isFetching,
       }),
     }
   );
 
-  dispatch(changeLoading({ loading: isLoadingProducts }));
+  dispatch(changeMainLoading({ loadingMain: isFetchingProducts, loadingDetailed: false }));
 
   const handleClick = () => {
     console.log('Error Button');
@@ -57,6 +57,7 @@ const Home = () => {
   const handleSelect = (e: FormEvent<HTMLSelectElement>) => {
     dispatch(changeSearch({ search: '' }));
     dispatch(changeQuantity({ quantity: Number((e.target as HTMLSelectElement).value) }));
+    dispatch(changeMainLoading({ loadingMain: isFetchingProducts, loadingDetailed: false }));
     setCurrentPage(1);
     setSearchParams({ page: '1' });
   };
@@ -80,7 +81,7 @@ const Home = () => {
               setCurrentPage={setCurrentPage}
             />
             <Select handleSelect={handleSelect} />
-            {isLoadingProducts && <Loader position="center" />}
+            {isFetchingProducts && <Loader position="center" />}
 
             <div className={styles.wrapper}>
               {products && <Gallery gallery={products} />}
