@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { Gallery, ItemProps } from '../components/types';
+import type { Gallery } from '../components/types';
 
 interface ListResponse {
   limit: number;
