@@ -1,15 +1,17 @@
 import { Routes, Route } from 'react-router-dom';
-// import Home from './pages/Home/Home';
-// import Details from './pages/Details/Details';
-// import NotFound from './pages/NotFound/NotFound';
+import Home from './pages/Home';
+import ControlledForm from './pages/ControlledForm';
+import UncontrolledForm from './pages/UncontrolledForm';
+import Layout from './components/Layout';
 
 const App = () => {
   return (
     <Routes>
-      {/* <Route path="/" element={<Home />}>
-        <Route path="product/:id" element={<Details />} />
-      </Route> */}
-      {/* <Route path="*" element={<NotFound />} /> */}
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="controlled" element={<ControlledForm />} />
+        <Route path="uncontrolled" element={<UncontrolledForm />} />
+      </Route>
     </Routes>
   );
 };
