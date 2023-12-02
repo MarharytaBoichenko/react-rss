@@ -1,5 +1,5 @@
-export type FormData = {
-  id: string;
+export interface IFormData {
+  id?: string;
   email: string;
   password: string;
   passwordsecond: string;
@@ -7,9 +7,17 @@ export type FormData = {
   age: number;
   gender: 'male' | 'female';
   agreement: boolean;
-  image: string;
+  image: string | FileList;
+  country: string;
+  key?: string;
+}
+
+export type Country = {
+  name: string;
+  code: string;
 };
 
 export type FormDataList = {
-  list: FormData[];
+  list: IFormData[];
+  countries: Country[];
 };

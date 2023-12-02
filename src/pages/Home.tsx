@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../hooks/hooks';
+import Card from '../components/Card';
+// import  styles  from './'
 const Home = () => {
   const { list } = useAppSelector((state) => state.formControlled);
   console.log(list);
+  const newCardIndex = list.length - 1;
+  console.log(newCardIndex);
 
   return (
     <div>
@@ -10,18 +14,26 @@ const Home = () => {
         <Link to="/controlled">Go to React Hook Form</Link>
         <h2>Data from React Hook Form</h2>
         {list &&
-          list.map(({ id, name, email, age, password, gender, agreement }) => (
-            <div key={id}>
-              <p>Name: {name}</p>
-              <p>Age: {age}</p>
-              <p>Email: {email}</p>
-              <p>Password: {password}</p>
-              <p>Gender: {gender}</p>
-              <p>Agreed T&C: {agreement}</p>
-              <p>Country:</p>
-              <p>Image:</p>
-            </div>
-          ))}
+          list.map(
+            (
+              { name, age, password, country, gender, image, agreement, id, email, passwordsecond },
+              index
+            ) => (
+              <Card
+                index={index}
+                key={id}
+                name={name}
+                age={age}
+                password={password}
+                country={country}
+                gender={gender}
+                image={image}
+                agreement={agreement}
+                email={email}
+                passwordsecond={passwordsecond}
+              />
+            )
+          )}
       </div>
       <div>
         <Link to="/uncontrolled">Go to Uncontrolled Form</Link>

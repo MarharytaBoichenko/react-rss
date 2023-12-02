@@ -1,35 +1,13 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
-import { FormData } from '../types';
-import { useAppDispatch } from '../hooks/hooks';
+import { IFormData } from '../types';
+import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import { controlledSlice } from '../redux/formSlice';
-
-const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup
-    .string()
-    .min(7)
-    .required('Please enter a password')
-    .matches(
-      /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{7,16}$/,
-      'Must Contain min 7 Characters, one Uppercase, one Lowercase, one Number and one special case Character'
-    ),
-  passwordsecond: yup
-    .string()
-    .min(7)
-    .required('Confirm your password')
-    .oneOf([yup.ref('password')], 'Passwords must match'),
-  name: yup
-    .string()
-    .required()
-    .matches(/^[A-Z][a-z]*$/, 'First letter  should be  capital'),
-  age: yup.number().required().positive().integer(),
-  gender: yup.string().required('Choose your  gender'),
-  agreement: yup.bool().oneOf([true], 'You must accept the terms and conditions'),
-});
+import DataList from '../components/Autocomplete';
+import InputForm from '../components/InputForm';
+import { schema } from '../schema';
 
 const ControlledForm: React.FC = () => {
   const {
@@ -37,16 +15,36 @@ const ControlledForm: React.FC = () => {
     handleSubmit,
     formState: { errors, isValid },
     reset,
-  } = useForm<FormData>({
+  } = useForm<IFormData>({
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const onSubmitHandler = (data: FormData) => {
-    console.log(data);
-    dispatch(controlledSlice.actions.getDataForm(data));
+  const countries = useAppSelector((state) => state.formControlled.countries);
+
+  const onSubmitHandler = (data: IFormData) => {
+    const imageToEncode = Array(data.image)[0];
+    console.log(imageToEncode);
+    const encodeFileBase64 = (file: FileList) => {
+      const reader = new FileReader();
+      if (file) {
+        reader.readAsDataURL(file[0]);
+        reader.onload = () => {
+          const Base64 = reader.result as string;
+          const newData: IFormData = { ...data, image: Base64 };
+          dispatch(controlledSlice.actions.getDataForm(newData));
+        };
+      }
+
+      reader.onerror = (error) => {
+        console.log('error: ', error);
+      };
+    };
+
+    if (typeof data.image !== 'string') encodeFileBase64(data.image);
+
     navigate('/');
     reset();
   };
@@ -60,60 +58,76 @@ const ControlledForm: React.FC = () => {
     <main>
       <h2>React Hook Form</h2>
       <form onSubmit={handleSubmit(onSubmitHandler)}>
-        <label htmlFor="name">
-          Name
-          <input type="text" {...register('name')} id="name" placeholder="name" />
-        </label>
-        {errors.name?.message && <p>{errors.name?.message}</p>}
-        <label htmlFor="age">
-          Age
-          <input type="number" {...register('age')} id="age" placeholder="age" />
-        </label>
-        {errors.age?.message && <p>{errors.age?.message}</p>}
-        <label htmlFor="email">
-          Email
-          <input type="email" {...register('email')} id="email" placeholder="email" />
-        </label>
-        {errors.email?.message && <p>{errors.email?.message}</p>}
-        <label htmlFor="password">
-          Password
-          <input type="text" {...register('password')} id="password" placeholder="password" />
-        </label>
-        {errors.password?.message && <p>{errors.password?.message}</p>}
-        <label htmlFor="password-second">
-          Repeat password
-          <input
-            type="password"
-            {...register('passwordsecond')}
-            id="password-second"
-            placeholder="confirm password"
-          />
-        </label>
-        {errors.passwordsecond?.message && <p>{errors.passwordsecond?.message}</p>}
+        <InputForm
+          label={'Name'}
+          type={'text'}
+          id={'name'}
+          register={{ ...register('name') }}
+          errorMessage={errors['name']?.message}
+        />
+        <InputForm
+          label={'Age'}
+          type={'age'}
+          id={'age'}
+          register={{ ...register('age') }}
+          errorMessage={errors['age']?.message}
+        />
+        <InputForm
+          label={'Email'}
+          type={'email'}
+          id={'email'}
+          register={{ ...register('email') }}
+          errorMessage={errors['email']?.message}
+        />
+        <InputForm
+          label={'Password'}
+          // type={'password'}
+          type={'text'}
+          id={'password'}
+          register={{ ...register('password') }}
+          errorMessage={errors['password']?.message}
+        />
+        <InputForm
+          label={'Confirm  your  password'}
+          type={'password'}
+          id={'passwordsecond'}
+          register={{ ...register('passwordsecond') }}
+          errorMessage={errors['passwordsecond']?.message}
+        />
         <div>
           <h3>Choose your gender</h3>
-          <label htmlFor="gender">
-            Female
-            <input type="radio" {...register('gender')} id="gender" value={Gender.FEMALE} />
-          </label>
-          <label htmlFor="gender">
-            Male
-            <input type="radio" {...register('gender')} id="gender" value={Gender.MALE} />
-          </label>
-          {errors.gender?.message && <p>{errors.gender?.message}</p>}
+          <InputForm
+            label={Gender.FEMALE}
+            type={'radio'}
+            value={Gender.FEMALE}
+            id={Gender.FEMALE}
+            register={{ ...register('gender') }}
+            errorMessage={errors['gender']?.message}
+          />
+          <InputForm
+            label={Gender.MALE}
+            type={'radio'}
+            value={Gender.MALE}
+            id={Gender.MALE}
+            register={{ ...register('gender') }}
+            errorMessage={errors['gender']?.message}
+          />
         </div>
-        <label htmlFor="">
-          I agree with terms and conditions
-          <input type="checkbox" {...register('agreement')} />
-        </label>
-        {errors.agreement?.message && <p>{errors.agreement?.message}</p>}
-        <label htmlFor="image">
-          Please upload image (png or jpeg)
-          <input type="file" {...register('image')} accept="image/png, image/jpeg" id="image" />
-        </label>
-        {/* <label htmlFor="">
-          <input type="" name="country" />
-        </label> */}
+        <InputForm
+          label={'I  agree  with  terms and conditions'}
+          type={'checkbox'}
+          id={'checkbox'}
+          register={{ ...register('agreement') }}
+          errorMessage={errors['agreement']?.message}
+        />
+        <InputForm
+          label={' Please upload image (png or jpeg)'}
+          type={'file'}
+          id={'image'}
+          register={{ ...register('image') }}
+          errorMessage={errors['image']?.message}
+        />
+        <DataList list={countries} register={{ ...register('country') }} />
         <button type="submit" disabled={!isValid}>
           Submit
         </button>

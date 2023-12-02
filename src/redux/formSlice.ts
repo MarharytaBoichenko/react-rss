@@ -1,21 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import { FormData, FormDataList } from '../types';
-const initialState: FormDataList = {
-  list: [],
-};
+import { IFormData } from '../types';
+import { initialState } from './initialState';
+// const initialState: FormDataList = {
+//   list: [],
+// };
 
 export const controlledSlice = createSlice({
   name: 'hookForm',
   initialState,
   reducers: {
-    getDataForm: (state, action: PayloadAction<FormData>) => {
-      const newItem = {
-        ...action.payload,
+    getDataForm: (state, action: PayloadAction<IFormData>) => {
+      console.log(action.payload);
+      const newItem: IFormData = {
         id: uuidv4(),
+        ...action.payload,
       };
-      state.list = [...state.list, newItem];
-      console.log(state.list);
+      state.list = [newItem, ...state.list];
       return state;
     },
   },
