@@ -1,6 +1,10 @@
 import * as yup from 'yup';
 import { ValidationError } from 'yup';
 
+yup.addMethod(yup.mixed, 'transFormFileList', function () {
+  return this.transform((value) => (value.length ? value[0] : value));
+});
+
 export const schema = yup.object().shape({
   country: yup.string().required('Please choose  a  country'),
   email: yup.string().email().required(),
@@ -21,19 +25,19 @@ export const schema = yup.object().shape({
     .string()
     .required()
     .matches(/^[A-Z][a-z]*$/, 'First letter  should be  capital'),
-  age: yup.number().required().positive().integer().max(120),
+  age: yup.number().required('Please  enter  your  age').positive().integer().min(0).max(120),
   gender: yup.string().required('Choose your  gender'),
   agreement: yup.bool().oneOf([true], 'You must accept the terms and conditions'),
   image: yup
-    .mixed<FileList>()
+    .mixed()
+    .transFormFileList()
     .required()
     .test(
       'type',
       'please  choose png  or  jpeg file',
-      (value: FileList) =>
-        value && (value[0]?.type === 'image/png' || value[0]?.type === 'image/jpg')
-    )
-    .test('fileSize', 'the  file  is too  large', (value: FileList) => value[0]?.size <= 1000000),
+      (value: File) => value && (value?.type === 'image/png' || value?.type === 'image/jpeg')
+    ) // .test('fileSize', 'the  file  is too  large', (value: FileList | File) => value[0]?.size <= 1000000),
+    .test('fileSize', 'the  file  is too  large', (value: File) => value?.size <= 1000000),
 });
 
 export const transformYupErrorsIntoObject = (errors: ValidationError) => {

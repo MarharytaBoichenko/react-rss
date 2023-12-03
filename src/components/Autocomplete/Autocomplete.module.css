@@ -1,0 +1,17 @@
+.text {
+  display: block;
+  font-size: 1.5rem;
+  color: black;
+  padding-bottom: 7px;
+}
+
+.wrapper {
+  padding-bottom: 10px;
+  width: 100%;
+}
+
+.input {
+  height: 30px;
+  width: 100%;
+  padding-left: 10px;
+}

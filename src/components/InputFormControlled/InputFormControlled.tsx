@@ -1,5 +1,6 @@
 import React from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
+import styles from './/InputFormControlled.module.css';
 type FormInputProps = {
   label: string;
   register: UseFormRegisterReturn;
@@ -21,9 +22,10 @@ const InputFormControlled: React.FC<FormInputProps> = ({
 }) => {
   return (
     <div>
-      <label htmlFor={id}>
-        {label}
+      <label htmlFor={id} className={styles.label}>
+        <span className={styles.text}>{label}: </span>
         <input
+          className={styles.input}
           type={type ?? undefined}
           {...register}
           id={id}
@@ -31,7 +33,7 @@ const InputFormControlled: React.FC<FormInputProps> = ({
           value={value}
         />
       </label>
-      {errorMessage && <p>{errorMessage}</p>}
+      <p className={styles.error}>{errorMessage}</p>
     </div>
   );
 };

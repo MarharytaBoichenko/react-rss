@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../hooks/hooks';
 import Card from '../components/Card';
-// import  styles  from './'
+import styles from '../App.module.css';
 const Home = () => {
   const { list } = useAppSelector((state) => state.formControlled);
   console.log(list);

@@ -1,12 +1,12 @@
 import React, { FormEvent, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IFormData } from '../types';
-import { useAppDispatch, useAppSelector } from '../hooks/hooks';
-import { controlledSlice } from '../redux/formSlice';
-import DataList from '../components/Autocomplete';
-import { schema, transformYupErrorsIntoObject } from '../schema';
-import InputUncontrolled from '../components/InputUncontrolled/InputUncontrolled';
-import styles from '../components/InputUncontrolled/InputUncontrolled.module.css';
+import { IFormData } from '../../types';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { controlledSlice } from '../../redux/formSlice';
+import DataList from '../../components/Autocomplete/Autocomplete';
+import { schema, transformYupErrorsIntoObject } from '../../schema';
+import InputUncontrolled from '../../components/InputUncontrolled/InputUncontrolled';
+import styles from '../UncontrolledForm/UncontrolledForm.module.css';
 
 const Gender = {
   MALE: 'male',
@@ -42,11 +42,13 @@ const UncontrolledForm: React.FC = () => {
         password: { value: string };
         passwordsecond: { value: string };
         gender: { value: 'male' | 'female' };
-        image: { value: FileList };
+        image: { value: File };
         checkbox: { checked: boolean };
         country: { value: string };
       };
 
+    // console.log('image', image);
+    // console.log('imageInputRef', imageInputRef.current.files[0]);
     const dataForm = {
       name: name.value,
       age: age.value,
@@ -54,26 +56,29 @@ const UncontrolledForm: React.FC = () => {
       password: password.value,
       gender: gender.value,
       image: image.value,
-      // checkbox: checkbox.checked,
       agreement: checkbox.checked,
       passwordsecond: passwordsecond.value,
       country: 'country',
     };
 
-    const isFormValid = await schema.isValid(dataForm, {
+    console.log(dataForm);
+    let dataForVal;
+    if (imageInputRef.current?.files !== null) {
+      dataForVal = { ...dataForm, image: imageInputRef?.current?.files[0] };
+    }
+    // const dataForVal = { ...dataForm, image: imageInputRef.current?.files[0] };
+
+    const isFormValid = await schema.isValid(dataForVal, {
       abortEarly: false,
     });
 
     if (isFormValid) {
-      console.log('Form is legit');
+      console.log('isFormValid', isFormValid);
       formRef.current?.reset();
       navigate('/');
     } else {
-      schema.validate(dataForm, { abortEarly: false }).catch((err) => {
-        console.log(err);
-        console.log(err.name);
-        console.log(err.errors);
-        console.log(err.inner);
+      schema.validate(dataForVal, { abortEarly: false }).catch((err) => {
+        console.log('ffd');
         const validationErrors = transformYupErrorsIntoObject(err);
         console.log('errorsFoRender', errorsFoRender);
         console.log('validationErrors', validationErrors);
@@ -89,7 +94,6 @@ const UncontrolledForm: React.FC = () => {
         reader.onload = () => {
           const Base64 = reader.result as string;
           const newData: IFormData = { ...dataForm, image: Base64 };
-          console.log(newData);
           dispatch(controlledSlice.actions.getDataForm(newData));
         };
       }
@@ -98,7 +102,7 @@ const UncontrolledForm: React.FC = () => {
         console.log('error: ', error);
       };
     };
-    console.log(imageInputRef !== null);
+
     if (
       imageInputRef.current?.files !== null &&
       typeof imageInputRef.current?.files[0] !== 'string'
@@ -107,49 +111,50 @@ const UncontrolledForm: React.FC = () => {
       encodeFileBase64(imageToEncode as File);
     }
   };
-  console.log(errorsFoRender?.name);
   return (
-    <main>
-      <h2>Uncontrolled Form</h2>
-      <form onSubmit={onSubmitHandler}>
-        <InputUncontrolled
-          label={'Name'}
-          errorMessage={errorsFoRender?.name && errorsFoRender.name}
-          type={'text'}
-          id={'name'}
-          placeholder={'Name'}
-        />
-        <InputUncontrolled
-          label={'Age'}
-          errorMessage={errorsFoRender?.age && errorsFoRender.age}
-          type={'number'}
-          id={'age'}
-          placeholder={'age'}
-        />
-        <InputUncontrolled
-          label={'Email'}
-          type={'email'}
-          id={'email'}
-          placeholder={'email@email'}
-          errorMessage={errorsFoRender?.email && errorsFoRender.email}
-        />
-        <InputUncontrolled
-          label={'Password'}
-          errorMessage={errorsFoRender?.password && errorsFoRender.password}
-          type={'password'}
-          id={'password'}
-          placeholder={'passWord12-3'}
-        />
-        <InputUncontrolled
-          label={'Repeat password'}
-          errorMessage={errorsFoRender?.passwordsecond && errorsFoRender.passwordsecond}
-          type={'password'}
-          id={'password-second'}
-          name={'passwordsecond'}
-          placeholder="confirm password"
-        />
-        <div>
-          <h3>Choose your gender</h3>
+    <>
+      <h2 className={styles.title}>Uncontrolled Form</h2>
+      <form className={styles.form} onSubmit={onSubmitHandler}>
+        <div className={styles.fields}>
+          <InputUncontrolled
+            label={'Name'}
+            errorMessage={errorsFoRender?.name && errorsFoRender.name}
+            type={'text'}
+            id={'name'}
+            placeholder={'Name'}
+          />
+          <InputUncontrolled
+            label={'Age'}
+            errorMessage={errorsFoRender?.age && errorsFoRender.age}
+            type={'number'}
+            id={'age'}
+            placeholder={'age'}
+          />
+          <InputUncontrolled
+            label={'Email'}
+            type={'email'}
+            id={'email'}
+            placeholder={'email@email'}
+            errorMessage={errorsFoRender?.email && errorsFoRender.email}
+          />
+          <InputUncontrolled
+            label={'Password'}
+            errorMessage={errorsFoRender?.password && errorsFoRender.password}
+            type={'password'}
+            id={'password'}
+            placeholder={'passWord12-3'}
+          />
+          <InputUncontrolled
+            label={'Confirm password'}
+            errorMessage={errorsFoRender?.passwordsecond && errorsFoRender.passwordsecond}
+            type={'password'}
+            id={'password-second'}
+            name={'passwordsecond'}
+            placeholder="confirm password"
+          />
+        </div>
+        <div className={styles.gender}>
+          <h3 className={styles.subtitle}>Choose your gender</h3>
           <div className={styles.wrapper}>
             <InputUncontrolled
               label={'Female'}
@@ -161,12 +166,12 @@ const UncontrolledForm: React.FC = () => {
             <InputUncontrolled
               label={'Male'}
               name={'gender'}
-              errorMessage={errorsFoRender?.gender && errorsFoRender.gender}
               type={'radio'}
               id={'gender-male'}
               value={Gender.MALE}
             />
           </div>
+          <p className={styles.error}>{errorsFoRender?.gender && errorsFoRender.gender}</p>
         </div>
         <InputUncontrolled
           label={' I agree with terms and conditions'}
@@ -174,17 +179,19 @@ const UncontrolledForm: React.FC = () => {
           type={'checkbox'}
           id={'checkbox'}
         />
-        <div>
-          <label htmlFor="image">
-            Please upload image (png or jpeg)
+        <div className={styles.image}>
+          <label htmlFor="image" className={styles.label}>
+            <span className={styles.text}>Please upload image (png or jpeg)</span>
             <input type="file" id="image" ref={imageInputRef} name="image" />
           </label>
           <p className={styles.error}>{errorsFoRender.image}</p>
         </div>
         <DataList list={countries} />
-        <button type="submit">Submit</button>
+        <button className={styles.button} type="submit">
+          Submit
+        </button>
       </form>
-    </main>
+    </>
   );
 };
 

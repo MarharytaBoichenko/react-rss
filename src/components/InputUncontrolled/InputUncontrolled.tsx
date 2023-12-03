@@ -25,9 +25,11 @@ const InputUncontrolled: React.FC<InputUncontrolledProps> = ({
 }) => {
   return (
     <div>
-      <label htmlFor={id}>
-        {label}
+      <label htmlFor={id} className={styles.label}>
+        <span className={styles.text}> {label}:</span>
+
         <input
+          className={styles.input}
           type={type ?? undefined}
           id={id}
           placeholder={placeholder}

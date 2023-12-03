@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import ControlledForm from './pages/ControlledForm';
-import UncontrolledForm from './pages/UncontrolledForm';
+import ControlledForm from './pages/ControlledForm/ControlledForm';
+import UncontrolledForm from './pages/UncontrolledForm/UncontrolledForm';
 import Layout from './components/Layout';
 
 const App = () => {
