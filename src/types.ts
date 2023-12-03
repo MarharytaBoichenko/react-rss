@@ -21,3 +21,14 @@ export type FormDataList = {
   list: IFormData[];
   countries: Country[];
 };
+
+export interface IValidationErrors {
+  name?: string;
+  age?: string;
+  email?: string;
+  password?: string;
+  passwordsecond?: string;
+  gender?: string;
+  image?: string;
+  checkbox?: string;
+}

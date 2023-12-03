@@ -6,7 +6,7 @@ import { IFormData } from '../types';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import { controlledSlice } from '../redux/formSlice';
 import DataList from '../components/Autocomplete';
-import InputForm from '../components/InputForm';
+import InputFormControlled from '../components/InputFormControlled';
 import { schema } from '../schema';
 
 const ControlledForm: React.FC = () => {
@@ -25,6 +25,7 @@ const ControlledForm: React.FC = () => {
   const countries = useAppSelector((state) => state.formControlled.countries);
 
   const onSubmitHandler = (data: IFormData) => {
+    console.log(data.image);
     const imageToEncode = Array(data.image)[0];
     console.log(imageToEncode);
     const encodeFileBase64 = (file: FileList) => {
@@ -58,45 +59,50 @@ const ControlledForm: React.FC = () => {
     <main>
       <h2>React Hook Form</h2>
       <form onSubmit={handleSubmit(onSubmitHandler)}>
-        <InputForm
+        <InputFormControlled
           label={'Name'}
           type={'text'}
           id={'name'}
           register={{ ...register('name') }}
           errorMessage={errors['name']?.message}
+          placeholder="Nme"
         />
-        <InputForm
+        <InputFormControlled
           label={'Age'}
-          type={'age'}
+          type={'number'}
           id={'age'}
           register={{ ...register('age') }}
           errorMessage={errors['age']?.message}
+          placeholder="age"
         />
-        <InputForm
+        <InputFormControlled
           label={'Email'}
           type={'email'}
           id={'email'}
           register={{ ...register('email') }}
           errorMessage={errors['email']?.message}
+          placeholder="email@email"
         />
-        <InputForm
+        <InputFormControlled
           label={'Password'}
           // type={'password'}
           type={'text'}
           id={'password'}
           register={{ ...register('password') }}
           errorMessage={errors['password']?.message}
+          placeholder="passWord12-3"
         />
-        <InputForm
+        <InputFormControlled
           label={'Confirm  your  password'}
           type={'password'}
           id={'passwordsecond'}
           register={{ ...register('passwordsecond') }}
           errorMessage={errors['passwordsecond']?.message}
+          placeholder="confirm password"
         />
         <div>
           <h3>Choose your gender</h3>
-          <InputForm
+          <InputFormControlled
             label={Gender.FEMALE}
             type={'radio'}
             value={Gender.FEMALE}
@@ -104,7 +110,7 @@ const ControlledForm: React.FC = () => {
             register={{ ...register('gender') }}
             errorMessage={errors['gender']?.message}
           />
-          <InputForm
+          <InputFormControlled
             label={Gender.MALE}
             type={'radio'}
             value={Gender.MALE}
@@ -113,15 +119,15 @@ const ControlledForm: React.FC = () => {
             errorMessage={errors['gender']?.message}
           />
         </div>
-        <InputForm
+        <InputFormControlled
           label={'I  agree  with  terms and conditions'}
           type={'checkbox'}
           id={'checkbox'}
           register={{ ...register('agreement') }}
           errorMessage={errors['agreement']?.message}
         />
-        <InputForm
-          label={' Please upload image (png or jpeg)'}
+        <InputFormControlled
+          label={' Please upload image (png or jpg)'}
           type={'file'}
           id={'image'}
           register={{ ...register('image') }}

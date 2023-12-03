@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { ValidationError } from 'yup';
 
 export const schema = yup.object().shape({
   country: yup.string().required('Please choose  a  country'),
@@ -20,18 +21,29 @@ export const schema = yup.object().shape({
     .string()
     .required()
     .matches(/^[A-Z][a-z]*$/, 'First letter  should be  capital'),
-  age: yup.number().required().positive().integer(),
+  age: yup.number().required().positive().integer().max(120),
   gender: yup.string().required('Choose your  gender'),
   agreement: yup.bool().oneOf([true], 'You must accept the terms and conditions'),
   image: yup
-    .mixed()
+    .mixed<FileList>()
     .required()
     .test(
-      'fileSize',
-      'the  file  is too  large',
-      (value: FileList) => value && value[0]?.size <= 1000000
+      'type',
+      'please  choose png  or  jpeg file',
+      (value: FileList) =>
+        value && (value[0]?.type === 'image/png' || value[0]?.type === 'image/jpg')
     )
-    .test('type', 'please  choose png  or  jpeg', (value: FileList) => {
-      return (value && value[0]?.type === 'image/png') || value[0]?.type === 'image/jpeg';
-    }),
+    .test('fileSize', 'the  file  is too  large', (value: FileList) => value[0]?.size <= 1000000),
 });
+
+export const transformYupErrorsIntoObject = (errors: ValidationError) => {
+  const validationErrors: Record<string, string> = {};
+
+  errors.inner.forEach((error) => {
+    if (error.path !== undefined) {
+      validationErrors[error.path] = error.errors[0];
+    }
+  });
+
+  return validationErrors;
+};

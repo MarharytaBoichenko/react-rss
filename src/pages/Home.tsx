@@ -12,7 +12,9 @@ const Home = () => {
     <div>
       <div>
         <Link to="/controlled">Go to React Hook Form</Link>
-        <h2>Data from React Hook Form</h2>
+        <br />
+        <Link to="/uncontrolled">Go to Uncontrolled Form</Link>
+        <h2>Data from Forms</h2>
         {list &&
           list.map(
             (
@@ -35,10 +37,10 @@ const Home = () => {
             )
           )}
       </div>
-      <div>
+      {/* <div>
         <Link to="/uncontrolled">Go to Uncontrolled Form</Link>
         <h2>Data from Uncontrolled Form</h2>
-      </div>
+      </div> */}
     </div>
   );
 };
