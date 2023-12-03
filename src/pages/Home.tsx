@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../hooks/hooks';
 import Card from '../components/Card';
-import styles from '../App.module.css';
 const Home = () => {
   const { list } = useAppSelector((state) => state.formControlled);
   console.log(list);
@@ -37,10 +36,6 @@ const Home = () => {
             )
           )}
       </div>
-      {/* <div>
-        <Link to="/uncontrolled">Go to Uncontrolled Form</Link>
-        <h2>Data from Uncontrolled Form</h2>
-      </div> */}
     </div>
   );
 };

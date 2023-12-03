@@ -26,14 +26,12 @@ const ControlledForm: React.FC = () => {
   const countries = useAppSelector((state) => state.formControlled.countries);
 
   const onSubmitHandler = (data: IFormData) => {
-    // const imageToEncode = Array(data.image)[0];
     console.log(data.image);
-    // console.log(imageToEncode);
     const encodeFileBase64 = (file: FileList) => {
       console.log('file', file);
       const reader = new FileReader();
       if (file) {
-        reader.readAsDataURL(file[0]);
+        reader.readAsDataURL(file);
         reader.onload = () => {
           const Base64 = reader.result as string;
           const newData: IFormData = { ...data, image: Base64 };

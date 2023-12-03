@@ -36,7 +36,7 @@ export const schema = yup.object().shape({
       'type',
       'please  choose png  or  jpeg file',
       (value: File) => value && (value?.type === 'image/png' || value?.type === 'image/jpeg')
-    ) // .test('fileSize', 'the  file  is too  large', (value: FileList | File) => value[0]?.size <= 1000000),
+    )
     .test('fileSize', 'the  file  is too  large', (value: File) => value?.size <= 1000000),
 });
 

@@ -47,8 +47,6 @@ const UncontrolledForm: React.FC = () => {
         country: { value: string };
       };
 
-    // console.log('image', image);
-    // console.log('imageInputRef', imageInputRef.current.files[0]);
     const dataForm = {
       name: name.value,
       age: age.value,
@@ -66,7 +64,6 @@ const UncontrolledForm: React.FC = () => {
     if (imageInputRef.current?.files !== null) {
       dataForVal = { ...dataForm, image: imageInputRef?.current?.files[0] };
     }
-    // const dataForVal = { ...dataForm, image: imageInputRef.current?.files[0] };
 
     const isFormValid = await schema.isValid(dataForVal, {
       abortEarly: false,

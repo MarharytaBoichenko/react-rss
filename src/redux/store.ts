@@ -4,10 +4,7 @@ import controlledSlice from './formSlice';
 const store = configureStore({
   reducer: {
     formControlled: controlledSlice,
-    // quantity: quantitySlice,
-    // loading: loadingSlice,
   },
-  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
 });
 
 export default store;
