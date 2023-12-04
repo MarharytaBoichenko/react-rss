@@ -1,0 +1,26 @@
+.error {
+  height: 15px;
+  color: brown;
+  font-size: 1rem;
+}
+
+.wrapper {
+  display: flex;
+}
+
+.text {
+  display: block;
+  font-size: 1.5rem;
+  color: black;
+}
+
+.label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input {
+  height: 30px;
+  padding-left: 10px;
+}

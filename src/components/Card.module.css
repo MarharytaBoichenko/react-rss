@@ -1,0 +1,22 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid blue;
+}
+
+.updated {
+  composes: wrapper;
+  border: 1px solid red;
+}
+.image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
+.info {
+  padding: 10px;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
