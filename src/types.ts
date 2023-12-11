@@ -7,7 +7,22 @@ export interface IFormData {
   age: number;
   gender: 'male' | 'female';
   agreement: boolean;
-  image: string | FileList;
+  image: string | null;
+  country: string;
+  key?: string;
+}
+
+export interface IDataFromForm {
+  id?: string;
+  email: string;
+  password: string;
+  passwordsecond: string;
+  name: string;
+  age: number;
+  gender: 'male' | 'female';
+  agreement: boolean;
+  image: [File];
+  // image: File;
   country: string;
   key?: string;
 }

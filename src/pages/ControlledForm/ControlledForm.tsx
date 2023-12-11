@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
-import { IFormData } from '../../types';
+import { IFormData, IDataFromForm } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { controlledSlice } from '../../redux/formSlice';
 import DataList from '../../components/Autocomplete/Autocomplete';
@@ -16,7 +16,7 @@ const ControlledForm: React.FC = () => {
     handleSubmit,
     formState: { errors, isValid },
     reset,
-  } = useForm<IFormData>({
+  } = useForm<IDataFromForm>({
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
@@ -25,30 +25,16 @@ const ControlledForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const countries = useAppSelector((state) => state.formControlled.countries);
 
-  const onSubmitHandler = (data: IFormData) => {
-    console.log(data.image);
-    const encodeFileBase64 = (file: FileList) => {
-      console.log('file', file);
-      const reader = new FileReader();
-      if (file) {
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          const Base64 = reader.result as string;
-          const newData: IFormData = { ...data, image: Base64 };
-          dispatch(controlledSlice.actions.getDataForm(newData));
-        };
-      }
-
-      reader.onerror = (error) => {
-        console.log('error: ', error);
-      };
+  const onSubmitHandler = async (data: IDataFromForm) => {
+    const reader = new FileReader();
+    await reader.readAsDataURL(data.image[0]);
+    reader.onload = () => {
+      const Base64 = reader.result as string;
+      const newData: IFormData = { ...data, image: Base64 };
+      dispatch(controlledSlice.actions.getDataForm(newData));
+      navigate('/');
+      reset();
     };
-
-    console.log(data.image);
-    if (typeof data.image !== 'string') encodeFileBase64(data.image);
-
-    navigate('/');
-    reset();
   };
 
   const Gender = {

@@ -1,6 +1,6 @@
 import React, { FormEvent, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IFormData } from '../../types';
+import { IFormData, IDataFromForm } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { controlledSlice } from '../../redux/formSlice';
 import DataList from '../../components/Autocomplete/Autocomplete';
@@ -42,40 +42,32 @@ const UncontrolledForm: React.FC = () => {
         password: { value: string };
         passwordsecond: { value: string };
         gender: { value: 'male' | 'female' };
-        image: { value: File };
+        image: { value: [File] };
         checkbox: { checked: boolean };
         country: { value: string };
       };
-
     const dataForm = {
       name: name.value,
       age: age.value,
       email: email.value,
       password: password.value,
       gender: gender.value,
-      image: image.value,
+      // image: image.value,
+      image: imageInputRef.current?.files,
       agreement: checkbox.checked,
       passwordsecond: passwordsecond.value,
       country: 'country',
     };
 
-    console.log(dataForm);
-    let dataForVal;
-    if (imageInputRef.current?.files !== null) {
-      dataForVal = { ...dataForm, image: imageInputRef?.current?.files[0] };
-    }
-
-    const isFormValid = await schema.isValid(dataForVal, {
+    const isFormValid = await schema.isValid(dataForm, {
       abortEarly: false,
     });
 
     if (isFormValid) {
-      console.log('isFormValid', isFormValid);
       formRef.current?.reset();
       navigate('/');
     } else {
-      schema.validate(dataForVal, { abortEarly: false }).catch((err) => {
-        console.log('ffd');
+      schema.validate(dataForm, { abortEarly: false }).catch((err) => {
         const validationErrors = transformYupErrorsIntoObject(err);
         console.log('errorsFoRender', errorsFoRender);
         console.log('validationErrors', validationErrors);
@@ -84,28 +76,14 @@ const UncontrolledForm: React.FC = () => {
       });
     }
 
-    const encodeFileBase64 = (file: File) => {
+    if (imageInputRef.current?.files) {
       const reader = new FileReader();
-      if (file) {
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          const Base64 = reader.result as string;
-          const newData: IFormData = { ...dataForm, image: Base64 };
-          dispatch(controlledSlice.actions.getDataForm(newData));
-        };
-      }
-
-      reader.onerror = (error) => {
-        console.log('error: ', error);
+      await reader.readAsDataURL(imageInputRef.current?.files[0]);
+      reader.onload = () => {
+        const Base64 = reader.result as string;
+        const newData: IFormData = { ...dataForm, image: Base64 };
+        dispatch(controlledSlice.actions.getDataForm(newData));
       };
-    };
-
-    if (
-      imageInputRef.current?.files !== null &&
-      typeof imageInputRef.current?.files[0] !== 'string'
-    ) {
-      const imageToEncode = imageInputRef.current?.files[0];
-      encodeFileBase64(imageToEncode as File);
     }
   };
   return (

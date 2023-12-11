@@ -1,10 +1,6 @@
 import * as yup from 'yup';
 import { ValidationError } from 'yup';
 
-yup.addMethod(yup.mixed, 'transFormFileList', function () {
-  return this.transform((value) => (value.length ? value[0] : value));
-});
-
 export const schema = yup.object().shape({
   country: yup.string().required('Please choose  a  country'),
   email: yup.string().email().required(),
@@ -29,15 +25,19 @@ export const schema = yup.object().shape({
   gender: yup.string().required('Choose your  gender'),
   agreement: yup.bool().oneOf([true], 'You must accept the terms and conditions'),
   image: yup
-    .mixed()
-    .transFormFileList()
+    .mixed<[File]>()
     .required()
     .test(
       'type',
       'please  choose png  or  jpeg file',
-      (value: File) => value && (value?.type === 'image/png' || value?.type === 'image/jpeg')
+      (value: [File]) =>
+        value[0] && (value[0].type === 'image/png' || value[0].type === 'image/jpeg')
     )
-    .test('fileSize', 'the  file  is too  large', (value: File) => value?.size <= 1000000),
+    .test(
+      'fileSize',
+      'the  file  is too  large',
+      (value: [File]) => value[0] && value[0].size <= 1000000
+    ),
 });
 
 export const transformYupErrorsIntoObject = (errors: ValidationError) => {
